@@ -1,0 +1,40 @@
+<div style="text-align:center">
+  <h1> CUSTOMER DETAILS</h1>
+</div>
+<div>
+  <label>Enter ID</label><br>
+  <input type="text" (focusout)=getId($event)/>
+</div>
+<div>
+  <label>Enter Name</label><br>
+  <input type="text" (focusout)=getName($event)/>
+</div>
+<div>
+  <label>Enter Location</label><br>
+  <input type="text" (focusout)=getLoc($event)/>
+</div>
+<div>
+  <label>Enter Salary</label><br>
+  <input type="text" (focusout)=getSal($event)/>
+</div>
+<button class="p" type="button" label="Add" (click)="addCustomer()">Add</button>
+<button class="p" type="button" label="Add" (click)="editCustomer()">Edit</button>
+<button class="p" type="button" label="Add" (click)="deleteCustomer()">Delete</button>
+<button class="p" type="button" label="Add" (click)="exportDetails()">Export</button>
+<button class="p" type="button" label="Add" (click)="importDetails()">Import</button>
+
+<div>
+<ag-grid-angular
+    style="width: 800px; height: 155px; "
+    class="ag-theme-blue"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    editable="true"
+    (gridReady)="onGridReady($event)"
+    (cellClicked)="onCellClick($event)"
+    [rowSelection]="rowSelection"
+   (rowSelected)="onRowSelected($event)"
+   [rowMultiSelectWithClick]="true">
+</ag-grid-angular>
+</div><router-outlet></router-outlet>
+
