@@ -26,17 +26,17 @@ export class AppComponent {
 
   
   columnDefs = [
-        { headerName: 'Customer ID', field: 'number',editable:"true" },
-        { headerName: 'Customer Name', field: 'data',editable:"true" },
-        { headerName: 'Location', field: 'data',editable:"true" },
-        { headerName: 'Salary', field: 'number' ,editable:"true" }];
+        { headerName: 'Customer ID', field: 'id',editable:true },
+        { headerName: 'Customer Name', field: 'name',editable:true },
+        { headerName: 'Location', field: 'location',editable:true },
+        { headerName: 'Salary', field: 'salary' ,editable:true }];
          
 
         rowData = [
-          { number: 123, data: 'AAA', data1: 'XXX', number1: 10000 },
-          { number: 124, data: 'AAA', data1: 'XXX', number1: 10000 },
-          { number: 122, data: 'AAA', data1: 'XXX', number1: 10000 },
-          { number: 121, data: 'AAA', data1: 'XXX', number1: 10000 },
+          { id: 123, name: 'AAA', location: 'XXX', salary: 10000 },
+          { id: 124, name: 'AAA', location: 'XXX', salary: 10000 },
+          { id: 122, name: 'AAA', location: 'XXX', salary: 10000 },
+          { id: 121, name: 'AAA', location: 'XXX', salary: 10000 },
 
       ];
 
@@ -68,7 +68,7 @@ export class AppComponent {
         this.selectedCustomer.location=this.cusLoc;
         this.selectedCustomer.salary=this.cusSal;
         this.databaseService.addCustomer(this.selectedCustomer).subscribe((customer: Customer)=>{
-          // this.databaseService.readProducts().subscribe((customer: Customer[])=>{
+          // this.databaseService.readCustomers().subscribe((customer: Customer[])=>{
           //   this.customer = customer;
           // })
         });
@@ -77,7 +77,7 @@ export class AppComponent {
 
       }
       editCustomer() {
-
+        console.log(this.selectedNodes);
       }
 
        
@@ -114,7 +114,7 @@ export class AppComponent {
         const id=sel.number;
         this.databaseService.deleteCustomer(id).subscribe((customer: Customer)=>{
           console.log("Deleted, ", customer);
-          // this.databaseService.readProducts().subscribe((customer: Customer[])=>{
+          // this.databaseService.readCustomers().subscribe((customer: Customer[])=>{
           //   this.customer = customer;
           // })
         });
