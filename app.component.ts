@@ -16,7 +16,8 @@ export class AppComponent {
    cusSal:number;
   gridApi:any;
   columnApi:any;
-  selectedNodes: RowNode[];  
+  selectedNodes: RowNode[];
+  editableNodes: RowNode[];
   customer: Customer[];
   selectedCustomer: Customer = { id : null , name: null, location: null,salary:null};
   //private rowSelection;
@@ -77,7 +78,16 @@ export class AppComponent {
 
       }
       editCustomer() {
-        console.log(this.selectedNodes);
+       console.log(this.editableNodes);
+      this.selectedCustomer.id=this.editableNodes['id'];
+      this.selectedCustomer.name=this.editableNodes['name'];
+      this.selectedCustomer.location=this.editableNodes['location'];
+      this.selectedCustomer.salary=this.editableNodes['salary'];
+      this.databaseService.updateCustomer(this.selectedCustomer).subscribe((customer: Customer)=>{
+        // this.databaseService.readProducts().subscribe((customer: Customer[])=>{
+        //   this.customer = customer;
+        // })
+      });
       }
 
        
@@ -120,4 +130,15 @@ export class AppComponent {
         });
         
       }
+  
+  onCellValueChange(params){
+      console.log(params);
+      const rowIndex=params.rowIndex;
+      const oldValue = params.oldValue;
+      const newValue = params.newValue;
+      const field = params.colDef.field;
+      this.editableNodes = this.selectedNodes;
+      this.editableNodes[field] = newValue;
+      console.log(this.editableNodes);
+    }
 }
