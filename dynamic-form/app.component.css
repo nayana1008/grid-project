@@ -1,0 +1,24 @@
+.p{
+    float: left;
+    margin-left: 8px;
+    margin-top: 30px;
+}
+
+.inputText{
+    clear: both;
+    margin-left: 8px;
+    margin-top: 50px;
+}
+
+.section{
+    float: left;
+    margin-left: 8px;
+    margin-top: 10px;
+}
+
+.fields{
+    float: left;
+    margin-left: 8px;
+    margin-top: 10px;
+    margin-bottom:10px;
+}

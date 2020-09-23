@@ -1,0 +1,238 @@
+
+<h2>Create New Worksheet</h2>
+<div class="p">
+<div>
+<label>Worksheet Name</label>
+</div>
+  <div>
+  <input type="text">
+</div>
+</div>
+<div class="p">
+<div>
+<label>Type</label>
+</div>
+  
+  <div>
+</div>
+  <input type="text">
+</div>
+<div class="p"> 
+<div>
+</div>
+  <label>Revision Nov</label>
+  <div>
+</div>
+  <input type="text">
+</div>
+<div class="p">
+<div>
+</div>
+  <label>Var</label>
+  <div>
+</div>
+  <input type="text">
+</div>
+<div class="inputText">
+  <button class="inputText" type="button" (click)="addNewSection()">Add</button>
+  <button class="inputText" type="button" (click)="editSection()">Edit</button>
+  <button class="inputText" type="button" (click)="deleteSection()">Delete</button>
+  <button class="inputText" type="button" >Preview</button>
+  <button class="inputText" type="button">Cancel</button>
+</div>
+
+<div *ngIf="addSection">
+  <h4>Create New Section</h4>
+  <div class="section">
+  <div>
+</div>
+    <label>Section Name</label>
+    <div>
+</div>
+    <input type="text">
+  </div>
+  <div class="section">
+  <div>
+</div>
+    <label>Layout</label>
+    <div>
+</div>
+    <input type="text">
+  </div>
+  <div class="section">
+  <div>
+</div>
+    <label>Table Row Expression</label>
+    <div>
+</div>
+    <input type="text">
+  </div>
+  <div class="section">
+  <div>
+</div>
+    <label>Var</label>
+    <div>
+</div>
+    <input type="text">
+  </div>
+
+</div>
+
+<div class="inputText" *ngIf="addSection">
+  <button class="inputText" type="button" (click)="addFormFields()">Add</button>
+  <button class="inputText" type="button" (click)="addRowFields()">Edit</button>
+  <button class="inputText" type="button" >Delete</button>
+  <button class="inputText" type="button" >Preview</button>
+</div>
+<div>
+  <div *ngIf="addFields" class="inputText">
+    <h4>Create Form Fields</h4>
+    <div class="inputText" *ngIf="addFields">
+  <button class="inputText" type="button" (click)="addFormFields()">+</button>
+  <button class="inputText" type="button" (click)="addRowFields()">Edit</button>
+  <button class="inputText" type="button" >-</button>
+</div>
+<div class="fields">
+<div> <label>Name</label>
+</div>
+ 
+  <div><input type="text">
+</div>
+  
+</div>
+<div class="fields">
+<div><label>Form Field Order</label>
+</div>
+  
+  <div><input type="text">
+</div>
+  
+</div>
+<div class="fields"> 
+<div><label>Type</label>
+</div>
+  
+  <div><input type="text">
+</div>
+  
+</div>
+<div class="fields">
+<div><label>Var</label>
+</div>
+  
+  <div><input type="text">
+</div>
+  
+</div>
+<div class="fields">
+<div><label>Expression</label>
+</div>
+  
+  <div><input type="text">
+</div>
+  
+</div>
+<div class="fields">
+<div><label>Required</label>
+</div>
+<div><input type="text">
+</div>
+  
+  
+</div>
+<div class="fields">
+<div><label>Validation</label>
+</div>
+<div><input type="text">
+</div>
+  
+  
+</div>
+<div class="fields">
+<div><label>Read Only</label>
+</div>
+<div><input type="text">
+</div>
+  
+  
+</div>
+</div>
+</div>
+
+
+
+
+
+
+<div class="fields" *ngIf="addFields" class="inputText">
+  <h4>Create Table Fields</h4>
+  <div class="inputText" >
+  <button class="inputText" type="button" (click)="addFormFields()">+</button>
+  <button class="inputText" type="button" (click)="addRowFields()">Edit</button>
+  <button class="inputText" type="button" >-</button>
+</div>
+  <div class="fields">
+  <div><label>Name</label>
+</div>
+<div><input type="text">
+</div>
+    
+    
+  </div>
+  <div class="fields">
+  <div><label>Form Field Order</label>
+</div>
+<div><input type="text">
+</div>
+    
+    
+  </div>
+  <div class="fields"> 
+  <div><label>Type</label>
+</div>
+<div><input type="text">
+</div>
+    
+    
+  </div>
+  <div class="fields">
+  <div><label>Var</label>
+</div>
+<div><input type="text">
+</div>
+    
+    
+  </div>
+  <div class="fields">
+  <div><label>Expression</label>
+</div>
+<div><input type="text">
+</div>
+    
+    
+  </div>
+  <div class="fields">
+  <div><label>Required</label>
+</div>
+<div><input type="text">
+</div>
+    
+    
+  </div>
+  <div class="fields">
+  <div><label>Validation</label>
+</div>
+<div><input type="text">
+</div>
+    
+    
+  </div>
+  <div class="fields">
+  <div><label>Read Only</label>
+</div>
+<div><input type="text">
+</div>
+    
+    
+  </div>
+</div>
