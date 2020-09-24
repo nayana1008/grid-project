@@ -14,8 +14,12 @@
 </div>
   
   <div>
+    <select name="typeValue" >
+      <option value="instrumentType">Instrument</option>
+      <option value="numericType">Numeric</option>
+      <option value="textType">Text</option>
+    </select>
 </div>
-  <input type="text">
 </div>
 <div class="p"> 
 <div>
@@ -57,7 +61,9 @@
     <label>Layout</label>
     <div>
 </div>
-    <input type="text">
+<select name="typeValue" >
+  <option value="formType">Form</option>
+</select>
   </div>
   <div class="section">
   <div>
@@ -112,7 +118,11 @@
 <div><label>Type</label>
 </div>
   
-  <div><input type="text">
+  <div><select name="typeValue" >
+    <option value="instrumentType">Instrument</option>
+    <option value="numericType">Numeric</option>
+    <option value="textType">Text</option>
+  </select>
 </div>
   
 </div>
@@ -190,7 +200,12 @@
   <div class="fields"> 
   <div><label>Type</label>
 </div>
-<div><input type="text">
+<div>
+  <select name="typeValue" >
+  <option value="instrumentType">Instrument</option>
+  <option value="numericType">Numeric</option>
+  <option value="textType">Text</option>
+</select>
 </div>
     
     
@@ -206,7 +221,9 @@
   <div class="fields">
   <div><label>Expression</label>
 </div>
-<div><input type="text">
+<div>
+  <input type="text">
+  
 </div>
     
     
@@ -235,4 +252,7 @@
     
     
   </div>
+</div>
+<div *ngIf="addFields">
+  <button class="inputText" type="button" >Submit</button>
 </div>
