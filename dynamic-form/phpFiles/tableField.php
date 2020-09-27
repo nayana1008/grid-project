@@ -11,8 +11,8 @@ if(isset($data) && !empty($data)){
   $required = mysqli_real_escape_string($conn, $data->required);
   $validation = mysqli_real_escape_string($conn, $data->validation);
   $readOnly = mysqli_real_escape_string($conn, $data->readOnly);
-  $sql = "INSERT INTO tableField (tableFieldName,secName,tableFieldOrder,type,  expression,var, required, validation,readOnly) 
-            VALUES ('$tableFieldName', '$secName', '$tableFieldOrder','$type' '$expression','$var', '$required','$validation','$readOnly')";
+  $sql = "INSERT INTO tableField (secName, tableFieldName, tableFieldOrder, type, var,  expression, required, validation, readOnly) 
+            VALUES ('$secName', '$tableFieldName', '$tableFieldOrder','$type','$var',  '$expression','$required','$validation','$readOnly')";
   if ($conn->query($sql) === TRUE) {
 	  echo "New record created successfully";
   } 

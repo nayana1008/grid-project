@@ -6,8 +6,8 @@ if(isset($data) && !empty($data)){
   $type = mysqli_real_escape_string($conn, $data->type);
   $revisionNo = mysqli_real_escape_string($conn, $data->revisionNo);
   $var = mysqli_real_escape_string($conn, $data->var);
-  $noOfSection = mysqli_real_escape_string($conn, $data->noOfSection);
-  $sql = "INSERT INTO worksheet (id, wname,  type, reviSionNo, noOfSection) VALUES ('$wname', '$type', '$revisionNo', '$var', '$noOfSection')";
+  $noOfSections = mysqli_real_escape_string($conn, $data->noOfSections);
+  $sql = "INSERT INTO worksheet (wname,  type, reviSionNo, var, noOfSections) VALUES ('$wname', '$type', '$revisionNo', '$var', '$noOfSections')";
   if ($conn->query($sql) === TRUE) {
 	  echo "New record created successfully";
   } 

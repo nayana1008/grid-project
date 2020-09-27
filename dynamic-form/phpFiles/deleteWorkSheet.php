@@ -2,8 +2,8 @@
 require 'worksheet.php';
 $data = json_decode(file_get_contents("php://input"));
 $wname = mysqli_real_escape_string($conn, $data->wname);
-if($id){
-  $sql = "DELETE FROM worksheet WHERE wname =$wname";
+if($wname){
+  $sql = "DELETE FROM worksheet WHERE wname ='$wname'";
   if ($conn->query($sql) === TRUE) {
 	  echo "Record deleted successfully";
   } 
