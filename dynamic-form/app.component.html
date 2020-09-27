@@ -1,258 +1,325 @@
-
-<h2>Create New Worksheet</h2>
-<div class="p">
 <div>
-<label>Worksheet Name</label>
+  <ag-grid-angular
+    style="width: 400px; height: 200px; margin-left: 16px;"
+    class="ag-theme-blue"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    [rowSelection]="rowSelection"
+    (gridReady)="onGridReady($event)"
+   (rowSelected)="onRowSelected($event)">
+</ag-grid-angular>
 </div>
-  <div>
-  <input type="text">
+<router-outlet></router-outlet>
+<div class="inputText" *ngIf="!preview">
+  <button class="inputText" type="button" (click)="addNewWorksheet()">Add</button>
+  <button class="inputText" type="button" (click)="editWorksheet()">Edit</button>
+  <button class="inputText" type="button" (click)="deleteWorksheet()">Delete</button>
+  <button class="inputText" type="button" (click)="previewWorksheet()" >Preview</button>
+  <button class="inputText" type="button" (click)="cancelWorksheet()">Cancel</button>
 </div>
-</div>
-<div class="p">
-<div>
-<label>Type</label>
-</div>
-  
-  <div>
-    <select name="typeValue" >
-      <option value="instrumentType">Instrument</option>
-      <option value="numericType">Numeric</option>
-      <option value="textType">Text</option>
-    </select>
-</div>
-</div>
-<div class="p"> 
-<div>
-</div>
-  <label>Revision Nov</label>
-  <div>
-</div>
-  <input type="text">
-</div>
-<div class="p">
-<div>
-</div>
-  <label>Var</label>
-  <div>
-</div>
-  <input type="text">
-</div>
-<div class="inputText">
-  <button class="inputText" type="button" (click)="addNewSection()">Add</button>
-  <button class="inputText" type="button" (click)="editSection()">Edit</button>
-  <button class="inputText" type="button" (click)="deleteSection()">Delete</button>
-  <button class="inputText" type="button" >Preview</button>
-  <button class="inputText" type="button">Cancel</button>
-</div>
-
-<div *ngIf="addSection">
-  <h4>Create New Section</h4>
-  <div class="section">
-  <div>
-</div>
-    <label>Section Name</label>
+<div *ngIf="addWorksheet">
+  <h2 *ngIf="!preview">Create New Worksheet</h2>
+  <h2 *ngIf="preview">Worksheet Details</h2>
+  <div class="p">
     <div>
-</div>
-    <input type="text">
-  </div>
-  <div class="section">
-  <div>
-</div>
-    <label>Layout</label>
+    <label>Worksheet Name</label>
+    </div>
     <div>
-</div>
-<select name="typeValue" >
-  <option value="formType">Form</option>
-</select>
+      <input type="text" [(ngModel)]="workSheetName" [readonly]="!editable" (focusout)=getWorksheetName($event)>
+    </div>
   </div>
-  <div class="section">
-  <div>
-</div>
-    <label>Table Row Expression</label>
+  <div class="p">
     <div>
-</div>
-    <input type="text">
-  </div>
-  <div class="section">
-  <div>
-</div>
-    <label>Var</label>
+      <label>Type</label>
+    </div>
     <div>
-</div>
-    <input type="text">
+      <select name="typeValue"  (focusout)=getType($event)>
+        <option value="instrumentType">Instrument</option>
+        <option value="numericType">Numeric</option>
+        <option value="textType">Text</option>
+      </select>
+    </div>
   </div>
+  <div class="p"> 
+    <div>
+      <label>Revision No</label>
+    </div>
+    <div>
+      <input type="text" [(ngModel)]="revisionNo" (focusout)=getRevisionNo($event)>
+    </div>
+  </div>
+  <div class="p">
+    <div>
+      <label>Var</label>
+    </div>
+    <div>
+        <input type="text" [(ngModel)]="worksheetVar" (focusout)=getWorksheetVar($event)>
+    </div>
+  </div>
+  <div class="inputText" *ngIf="!preview">
+    <button class="inputText" type="button" (click)="addNewSection()">Add</button>
+    <button class="inputText" type="button" (click)="editSection()">Edit</button>
+    <button class="inputText" type="button" (click)="deleteSection()">Delete</button>
+    <button class="inputText" type="button" >Preview</button>
+    <button class="inputText" type="button" (click)="cancelSection()">Cancel</button>
+  </div>
+  <div class="inputText" *ngIf="addSection ">
+    <h4>Create New Section</h4>
+    <div class="section">
+      <div>
+        <label>Section Name</label>
+      </div>
+      <div>
+        <input type="text" [(ngModel)]="sectionName" [readonly]="!editable" (focusout)=getSectionName($event)>
+      </div>
+    </div>
+    <div class="section">
+      <div>
+        <label>Layout</label>
+      </div>
+      <div>
+        <select name="typeValue" (focusout)=getSectionLayout($event) >
+          <option value="formType">Form</option>
+        </select>
+      </div>
+    </div>
+    <div class="section">
+      <div>
+        <label>Section Order</label>
+      </div>
+      <div>
+        <input type="text" [(ngModel)]="tableRowExpression" (focusout)=getTableRowExpression($event)>
+      </div>
+    </div>
+    <div class="section">
+      <div>
+        <label>Var</label>
+      </div>
+      <div>
+        <input type="text" [(ngModel)]="sectionVar" (focusout)=getSectionVar($event)>
+      </div>
+    </div>
+    <div class="inputText" *ngIf="addSection && !editFields && !preview">
+      <button class="inputText" type="button" (click)="addFormFields()">Add</button>
+      <button class="inputText" type="button">Edit</button>
+      <button class="inputText" type="button" >Delete</button>
+    </div>
+    <div *ngIf="addFields && !editFields" class="inputText">
+      <h4>Create Form Fields</h4>
+      <div class="inputText" *ngIf="addFields">
+        <button class="inputText" type="button" (click)="addRowFields()">+</button>
+        <button class="inputText" type="button" (click)="editRowFields()">Edit</button>
+        <button class="inputText" type="button" (click)="deleteRowFields()" >-</button>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Name</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="formFieldName" [readonly]="!editable" (focusout)=getFormFieldName($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Form Field Order</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="formFieldOrder" (focusout)=getFormFieldOrder($event)>
+        </div>
+      </div>
+      <div class="fields"> 
+        <div>
+          <label>Type</label>
+        </div>
+        <div>
+          <select name="typeValue"  (focusout)=getFormFieldType($event)>
+            <option value="instrumentType">Instrument</option>
+            <option value="numericType">Numeric</option>
+            <option value="textType">Text</option>
+          </select>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Var</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="formFieldVar" (focusout)=getFormFieldVar($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Expression</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="formFieldExpression" (focusout)=getFormExpression($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Required</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="formRequired" (focusout)=getFormRequired($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Validation</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="formValidation" (focusout)=getFormValidation($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Read Only</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="formReadOnly" (focusout)=getFormReadOnly($event)>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="addFields && (!editFields||!preview)" class="inputText">
+      <h4>Create Table Fields</h4>
+      <div class="inputText" >
+        <button class="inputText" type="button" (click)="addTableFields()">+</button>
+        <button class="inputText" type="button" (click)="editTableFields()">Edit</button>
+        <button class="inputText" type="button" >-</button>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Name</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="tableFieldName" [readonly]="!editable" (focusout)=getTableFieldName($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Form Field Order</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="tableFieldOrder" (focusout)=getTableFieldOrder($event)>
+        </div>
+      </div>
+      <div class="fields"> 
+        <div>
+          <label>Type</label>
+        </div>
+        <div>
+          <select name="typeValue"  (focusout)=getTableFieldType($event)>
+            <option value="instrumentType">Instrument</option>
+            <option value="numericType">Numeric</option>
+            <option value="textType">Text</option>
+          </select>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Var</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="tableFieldVar" (focusout)=getTableFieldVar($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Expression</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="tableFieldExpression" (focusout)=getTableExpression($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Required</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="tableRequired" (focusout)=getTableFieldRequired($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Validation</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="tableValidation" (focusout)=getTableValidation($event)>
+        </div>
+      </div>
+      <div class="fields">
+        <div>
+          <label>Read Only</label>
+        </div>
+        <div>
+          <input type="text" [(ngModel)]="tableReadOnly" (focusout)=getTableReadOnly($event)>
+        </div>
+      </div>
+      <div *ngIf="addFields"class="submitButton">
+        <button class="inputText" type="button" (click)="onSubmit()">Submit</button>
+      </div>
+    </div>
+    <div *ngIf="editFields && !addFields" class="inputText">
+      <h4>Form Fields</h4>
+      <div>
+        <button class="inputText" type="button" (click)="addFormFields()">+</button>
+        <button class="inputText" type="button" (click)="editRowFields()">Edit</button>
+        <button class="inputText" type="button" (click)="deleteRowFields()" >-</button>
+      </div>
+      <ag-grid-angular
+      style="width: 800px; height: 100px; margin-left: 8px;"
+      class="ag-theme-blue"
+      [rowData]="formRowData"
+      [columnDefs]="formColumnDefs"
+      [rowSelection]="rowSelection"
+      (gridReady)="onFormGridReady($event)"
+      (cellValueChanged)="onCellValueChange($event)"
+     (rowSelected)="onRowSelected($event)">
+  </ag-grid-angular>
 
-</div>
 
-<div class="inputText" *ngIf="addSection">
-  <button class="inputText" type="button" (click)="addFormFields()">Add</button>
-  <button class="inputText" type="button" (click)="addRowFields()">Edit</button>
-  <button class="inputText" type="button" >Delete</button>
-  <button class="inputText" type="button" >Preview</button>
-</div>
-<div>
-  <div *ngIf="addFields" class="inputText">
-    <h4>Create Form Fields</h4>
-    <div class="inputText" *ngIf="addFields">
-  <button class="inputText" type="button" (click)="addFormFields()">+</button>
-  <button class="inputText" type="button" (click)="addRowFields()">Edit</button>
-  <button class="inputText" type="button" >-</button>
-</div>
-<div class="fields">
-<div> <label>Name</label>
-</div>
+
+    </div>
+    <div *ngIf="preview" class="textBox">
+      <h4>Form Fields</h4>
+      <div>
+        <input type="text" [(ngModel)]="rowNumberHeader" (focusout)=getTableFieldVar($event)>
+        <input type="text" (focusout)=getRowNumber($event)>
+      </div>
+
+
+    </div>
+    <div *ngIf="editFields||preview && !addFields" class="grid">
+      <h4>Table Fields</h4>
+      <div *ngIf="!preview" class="grid">
+        <button class="inputText" type="button" (click)="addTableFields()">+</button>
+        <button class="inputText" type="button" (click)="editTableFields()">Edit</button>
+        <button class="inputText" type="button" (click)="deleteTableFields()" >-</button>
+      </div>
+      <div>
+        <ag-grid-angular
+        style="width: 800px; height: 200px; margin-left: 8px;"
+        class="ag-theme-blue"
+        [rowData]="tableRowData"
+        [columnDefs]="tableColumnDefs"
+        [rowSelection]="rowSelection"
+        (gridReady)="onTableGridReady($event)"
+        (cellValueChanged)="onCellValueChange($event)"
+        (cellDoubleClicked)="onCellDoubleClick($event)"
+       (rowSelected)="onRowSelected($event)">
+    </ag-grid-angular>
+    </div>
+  </div>
+  <div *ngIf="editFields" class="submitButton">
+        <button class="inputText" type="button" (click)="onSubmitChanges()">Submit Changes</button>
+      </div>
+      <div *ngIf="preview" class="submitButton">
+        <button class="inputText" type="button" (click)="setValue($event)">Value</button>
+      </div>
+      <div *ngIf="preview" class="submitButton">
+        <button class="inputText" type="button" (click)="cancelPreview()">Cancel Preview</button>
+      </div>
+
  
-  <div><input type="text">
 </div>
-  
-</div>
-<div class="fields">
-<div><label>Form Field Order</label>
-</div>
-  
-  <div><input type="text">
-</div>
-  
-</div>
-<div class="fields"> 
-<div><label>Type</label>
-</div>
-  
-  <div><select name="typeValue" >
-    <option value="instrumentType">Instrument</option>
-    <option value="numericType">Numeric</option>
-    <option value="textType">Text</option>
-  </select>
-</div>
-  
-</div>
-<div class="fields">
-<div><label>Var</label>
-</div>
-  
-  <div><input type="text">
-</div>
-  
-</div>
-<div class="fields">
-<div><label>Expression</label>
-</div>
-  
-  <div><input type="text">
-</div>
-  
-</div>
-<div class="fields">
-<div><label>Required</label>
-</div>
-<div><input type="text">
-</div>
-  
-  
-</div>
-<div class="fields">
-<div><label>Validation</label>
-</div>
-<div><input type="text">
-</div>
-  
-  
-</div>
-<div class="fields">
-<div><label>Read Only</label>
-</div>
-<div><input type="text">
-</div>
-  
-  
-</div>
-</div>
-</div>
-
-
-
-
-
-
-<div class="fields" *ngIf="addFields" class="inputText">
-  <h4>Create Table Fields</h4>
-  <div class="inputText" >
-  <button class="inputText" type="button" (click)="addFormFields()">+</button>
-  <button class="inputText" type="button" (click)="addRowFields()">Edit</button>
-  <button class="inputText" type="button" >-</button>
-</div>
-  <div class="fields">
-  <div><label>Name</label>
-</div>
-<div><input type="text">
-</div>
-    
-    
-  </div>
-  <div class="fields">
-  <div><label>Form Field Order</label>
-</div>
-<div><input type="text">
-</div>
-    
-    
-  </div>
-  <div class="fields"> 
-  <div><label>Type</label>
-</div>
-<div>
-  <select name="typeValue" >
-  <option value="instrumentType">Instrument</option>
-  <option value="numericType">Numeric</option>
-  <option value="textType">Text</option>
-</select>
-</div>
-    
-    
-  </div>
-  <div class="fields">
-  <div><label>Var</label>
-</div>
-<div><input type="text">
-</div>
-    
-    
-  </div>
-  <div class="fields">
-  <div><label>Expression</label>
-</div>
-<div>
-  <input type="text">
-  
-</div>
-    
-    
-  </div>
-  <div class="fields">
-  <div><label>Required</label>
-</div>
-<div><input type="text">
-</div>
-    
-    
-  </div>
-  <div class="fields">
-  <div><label>Validation</label>
-</div>
-<div><input type="text">
-</div>
-    
-    
-  </div>
-  <div class="fields">
-  <div><label>Read Only</label>
-</div>
-<div><input type="text">
-</div>
-    
-    
-  </div>
-</div>
-<div *ngIf="addFields">
-  <button class="inputText" type="button" >Submit</button>
 </div>

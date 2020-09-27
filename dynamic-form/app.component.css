@@ -7,13 +7,14 @@
 .inputText{
     clear: both;
     margin-left: 8px;
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 .section{
     float: left;
     margin-left: 8px;
     margin-top: 10px;
+    margin-bottom:10px;
 }
 
 .fields{
@@ -21,4 +22,23 @@
     margin-left: 8px;
     margin-top: 10px;
     margin-bottom:10px;
+}
+.submitButton{
+    clear: both;
+    float: left;
+    margin-left: 8px;
+    margin-top: 10px;
+    margin-bottom:10px;
+
+}
+.grid{
+    clear: both;
+    margin-left: 8px;
+    margin-top: 30px;
+    padding-right: 10px;
+}
+.textBox{
+    clear: both;
+    margin-left: 8px;
+    margin-top: 30px;
 }
