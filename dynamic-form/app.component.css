@@ -16,6 +16,9 @@
     margin-top: 10px;
     margin-bottom:10px;
 }
+#rowValue{
+    margin-left: 8px;
+}
 
 .fields{
     float: left;

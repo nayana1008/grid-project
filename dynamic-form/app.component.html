@@ -45,7 +45,7 @@
       <label>Revision No</label>
     </div>
     <div>
-      <input type="text" [(ngModel)]="revisionNo" (focusout)=getRevisionNo($event)>
+      <input type="text" [(ngModel)]="revisionNo" [readonly]="preview"  (focusout)=getRevisionNo($event)>
     </div>
   </div>
   <div class="p">
@@ -53,7 +53,7 @@
       <label>Var</label>
     </div>
     <div>
-        <input type="text" [(ngModel)]="worksheetVar" (focusout)=getWorksheetVar($event)>
+        <input type="text" [(ngModel)]="worksheetVar" [readonly]="preview"  (focusout)=getWorksheetVar($event)>
     </div>
   </div>
   <div class="inputText" *ngIf="!preview">
@@ -88,7 +88,7 @@
         <label>Section Order</label>
       </div>
       <div>
-        <input type="text" [(ngModel)]="tableRowExpression" (focusout)=getTableRowExpression($event)>
+        <input type="text" [(ngModel)]="tableRowExpression" [readonly]="preview"  (focusout)=getTableRowExpression($event)>
       </div>
     </div>
     <div class="section">
@@ -96,7 +96,7 @@
         <label>Var</label>
       </div>
       <div>
-        <input type="text" [(ngModel)]="sectionVar" (focusout)=getSectionVar($event)>
+        <input type="text" [(ngModel)]="sectionVar"  [readonly]="preview" (focusout)=getSectionVar($event)>
       </div>
     </div>
     <div class="inputText" *ngIf="addSection && !editFields && !preview">
@@ -284,7 +284,7 @@
       <h4>Form Fields</h4>
       <div>
         <input type="text" [(ngModel)]="rowNumberHeader" (focusout)=getTableFieldVar($event)>
-        <input type="text" (focusout)=getRowNumber($event)>
+        <input id="rowValue" type="text" (focusout)=getRowNumber($event)>
       </div>
 
 

@@ -66,18 +66,18 @@ export class AppComponent implements OnInit {
   firstValue:number;
   secondValue:number;
   rowIndex:number;
-
+  tableFieldsList=[];
+  expressionMap  = new Map<string, string>();
+  variableMap={};
+  valueMap={};
   constructor(private http: HttpClient,private router: Router) {}
 
   ngOnInit() {
     this.worksheets.push('Worksheet1','Worksheet2','ffsdf');
     this.addWorksheet=false;
-    //this.preview=false;
     this.editable=true;
     let  rowCount=1;
     this.http.get<Worksheets[]>('http://localhost/readWorksheet.php').subscribe((worksheets: Worksheets[])=>{
-      //this.rowData['no']=rowCount;
-      //worksheets['no']=rowCount;
       this.worksheetsGridData.push(worksheets);
      this.rowData=worksheets;
      rowCount=rowCount+1;
@@ -101,19 +101,11 @@ export class AppComponent implements OnInit {
       this.editable=false;
       const wname = selectedRow[0].wname;
       this.http.post<Worksheets[]>('http://localhost/readWorksheet.php',{"wname":wname}).subscribe((worksheets: Worksheets[])=>{
-        this.workSheetName=worksheets[0].wname;
-        this.type=worksheets[0].type;
-        this.worksheetVar=worksheets[0].var;
-        this.revisionNo=worksheets[0].revisionNo;
+        this.getWorksheetData(worksheets); 
         this.http.post<Sections[]>('http://localhost/readSection.php',{"wname":wname}).subscribe((sections: Sections[])=>{
-          this.sectionName=sections[0].secName;
-          this.sectionVar=sections[0].var;
-          this.selectionOrder=sections[0].selectionOrder;
-          this.tableRowExpression=sections[0].selectionOrder.toString();
+          this.getSectionData(sections);
           this.http.post<FormFields[]>('http://localhost/readFormFields.php',{"secName":this.sectionName}).subscribe((formFields: FormFields[])=>{
-           
-            this.formRowData=formFields;
-            
+            this.formRowData=formFields;          
           this.http.post<TableFields[]>('http://localhost/readTableField.php',{"secName":this.sectionName}).subscribe((tableFields: TableFields[])=>{
            
             this.tableRowData=tableFields;
@@ -398,26 +390,23 @@ export class AppComponent implements OnInit {
         this.addSection=true;
         const wname = selectedRow[0].wname;
       this.http.post<Worksheets[]>('http://localhost/readWorksheet.php',{"wname":wname}).subscribe((worksheets: Worksheets[])=>{
-        this.workSheetName=worksheets[0].wname;
-        this.type=worksheets[0].type;
-        this.worksheetVar=worksheets[0].var;
-        this.revisionNo=worksheets[0].revisionNo;
+        this.getWorksheetData(worksheets);
         this.http.post<Sections[]>('http://localhost/readSection.php',{"wname":wname}).subscribe((sections: Sections[])=>{
-          this.sectionName=sections[0].secName;
-          this.sectionVar=sections[0].var;
-          this.selectionOrder=sections[0].selectionOrder;
-          this.tableRowExpression=sections[0].selectionOrder.toString();
+          this.getSectionData(sections);
           this.http.post<FormFields[]>('http://localhost/readFormFields.php',{"secName":this.sectionName}).subscribe((formFields: FormFields[])=>{
            this.rowNumberHeader=formFields[0].formFieldName;
           this.http.post<TableFields[]>('http://localhost/readTableField.php',{"secName":this.sectionName}).subscribe((tableFields: TableFields[])=>{
           this.tableColumnDefs=[];
+         
           this.tableColumnDefs.push({ headerName: 'No', field: 'no', editable: false });
+          this.tableFieldsList.push(tableFields);
           for(let i=0;i<tableFields.length;i++){
-            this.tableColumnDefs.push({ headerName: tableFields[i].tableFieldName, field: 'tableFieldName'+i, editable: true });
+            const isEditable=tableFields[i].readOnly==1?false:true;
+            this.tableColumnDefs.push({ headerName: tableFields[i].tableFieldName, field: tableFields[i].var, editable: isEditable });
+            const variableName = tableFields[i].var;
+            this.expressionMap[variableName]=tableFields[i].expression;
           } 
-          this.tableExp= tableFields[2].expression;
-          const exp= tableFields[2].expression;
-            
+ 
           });
           
       });
@@ -426,6 +415,21 @@ export class AppComponent implements OnInit {
       }
       
     }
+    
+
+  private getSectionData(sections: Sections[]) {
+    this.sectionName = sections[0].secName;
+    this.sectionVar = sections[0].var;
+    this.selectionOrder = sections[0].selectionOrder;
+    this.tableRowExpression = sections[0].selectionOrder.toString();
+  }
+
+  private getWorksheetData(worksheets: Worksheets[]) {
+    this.workSheetName = worksheets[0].wname;
+    this.type = worksheets[0].type;
+    this.worksheetVar = worksheets[0].var;
+    this.revisionNo = worksheets[0].revisionNo;
+  }
 
     onCellDoubleClick(params){
       if(this.preview){
@@ -438,31 +442,55 @@ export class AppComponent implements OnInit {
       this.ngOnInit();
     }
 
-    setValue(){
-      const rowNode = this.tableGridApi.getRowNode(this.rowIndex);
-      if(this.tableExp=='+'){
-        rowNode.setDataValue('tableFieldName2', this.firstValue+this.secondValue);
-      }else if(this.tableExp=='-'){
-        rowNode.setDataValue('tableFieldName2', this.firstValue-this.secondValue);
-      }else if(this.tableExp=='*'){
-        rowNode.setDataValue('tableFieldName2', this.firstValue*this.secondValue);
-      }else if(this.tableExp=='/'){
-        rowNode.setDataValue('tableFieldName2', this.firstValue/this.secondValue);
+  splitExpsn(s: string) {
+    let array;
+    const operator = "/*+-^";
+    for (var i = 0; i < operator.length; i++) {
+      if (i == 0) {
+        array = s.split(operator[i]);
       }
-        
+      else {
+        array = array.toString().split(operator[i]);
+      }
+    }
+    return array;
+  }
 
+ 
+    setValue(){
+      let result = 0;
+      const rowNode = this.tableGridApi.getRowNode(this.rowIndex);
+      const selectedRow = this.tableGridApi.getSelectedRows();
+      const keys = Object.keys(this.expressionMap);
+      keys.forEach(k => {
+        let val = this.expressionMap[k];
+        if(val!=''){
+         const a= this.splitExpsn(val);
+         const variables = a[0].split(',');
+         console.log(variables);
+         for (let i = 0; i < variables.length; i++) {
+           if(selectedRow[0][variables[i]]){
+            val=val.replace(variables[i],selectedRow[0][variables[i]]);
+           }
+        }
+        result=eval(val);
+        if(result==undefined||NaN){
+          rowNode.setDataValue(k, 0);
+        }else{
+          rowNode.setDataValue(k, result);
+        }
+        
+        }
+        
+      });
     }
 
     onCellValueChange(params) {
+
       const rowIndex = params.rowIndex;
       const oldValue = params.oldValue;
       const newValue = params.newValue;
       const field = params.colDef.field;
-      if(field=='tableFieldName0'){
-        this.firstValue=Number(newValue);
-      }else if(field=='tableFieldName1'){
-        this.secondValue=Number(newValue);
-      }
       this.editableNodes = this.selectedNodes;
       this.editableNodes[field] = newValue;
     }
@@ -482,13 +510,13 @@ export class AppComponent implements OnInit {
     }
 
     onSubmitChanges(){
-      this.http.post('http://localhost/updateSection.php',{"wname":this.workSheetName, "secName":this.sectionName, 
+      this.http.put('http://localhost/updateSection.php',{"wname":this.workSheetName, "secName":this.sectionName, 
                       "layout":this.sectionLayout, "var":this.sectionVar,
-                      "selectionOrder":this.selectionOrder,"noOfFormFields":1,
+                      "selectionOrder":this.tableRowExpression,"noOfFormFields":1,
                       "noOfTableFields":3}).subscribe(data=>{
        });
-       this.http.post('http://localhost/updateWorksheet.php',{"wname":this.workSheetName, "type":this.type, 
-                      "layout":'hhh', "reviSionNo":this.revisionNo,
+       this.http.put('http://localhost/updateWorksheet.php',{"wname":this.workSheetName, "type":this.type, 
+                      "layout":'hhh', "revisionNo":this.revisionNo,
                       "var":this.worksheetVar,"noOfSections":1}).subscribe(data=>{
        });
       this.ngOnInit();
@@ -501,7 +529,7 @@ export class AppComponent implements OnInit {
                       "noOfTableFields":3}).subscribe(data=>{
        });
        this.http.post('http://localhost/addWorksheet.php',{"wname":this.workSheetName, "type":this.type, 
-                      "layout":'hhh', "reviSionNo":this.revisionNo,
+                      "layout":'hhh', "revisionNo":this.revisionNo,
                       "var":this.worksheetVar,"noOfSections":1}).subscribe(data=>{
        });
 
